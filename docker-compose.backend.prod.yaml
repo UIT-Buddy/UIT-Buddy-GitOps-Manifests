@@ -62,4 +62,3 @@ volumes:
 
 networks:
   uit_buddy_shared_network:
-    external: true
