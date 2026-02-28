@@ -1,0 +1,1 @@
+If you want to try our product but don't want to clone and build code, you're in the right place.
