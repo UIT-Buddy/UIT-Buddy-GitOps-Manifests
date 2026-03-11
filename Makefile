@@ -12,10 +12,12 @@ pull-backend:
 	podman pull ghcr.io/uit-buddy/backend:latest
 
 up: pull-backend
-	@echo ">> Pulling auxiliary images Postgres, Redis..."
-	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
-	@echo ">> Starting all infrastructure..."
-	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
+    @echo ">> Pulling auxiliary images Postgres, Redis..."
+    podman compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
+    @echo ">> Starting all infrastructure..."
+    podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
+    @echo ">> Forcing backend container to recreate with the latest image..."
+    podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d --force-recreate --no-deps backend
 
 down:
 	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v
