@@ -18,7 +18,7 @@ services:
       start_period: 10s
 
   backend:
-    image: ghcr.io/uit-buddy/backend:latest
+    image: ghcr.io/uit-buddy/backend:${IMAGE_TAG:-latest}
     container_name: uit-buddy-backend
     restart: always
     ports:

@@ -1,5 +1,9 @@
 .PHONY: help up down prune recreate-volumes
 
+# Default to latest if running manually, but accept pipeline variables
+IMAGE_TAG ?= latest
+IMAGE_NAME = ghcr.io/uit-buddy/backend:$(IMAGE_TAG)
+
 help:
 	@echo Usage:
 	@echo   make up               - Pull if new image exists and start all services
@@ -9,15 +13,14 @@ help:
 	@echo   make help             - Show this help message
 
 pull-backend:
-	podman pull ghcr.io/uit-buddy/backend:latest
+	@echo ">> Pulling backend image: $(IMAGE_NAME)"
+	podman pull $(IMAGE_NAME)
 
 up: pull-backend
-    @echo ">> Pulling auxiliary images Postgres, Redis..."
-    podman compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
-    @echo ">> Starting all infrastructure..."
-    podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
-    @echo ">> Forcing backend container to recreate with the latest image..."
-    podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d --force-recreate --no-deps backend
+	@echo ">> Pulling auxiliary images Postgres, Redis..."
+	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
+	@echo ">> Starting infrastructure with backend image tag: $(IMAGE_TAG)..."
+	IMAGE_TAG=$(IMAGE_TAG) podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
 
 down:
 	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v
