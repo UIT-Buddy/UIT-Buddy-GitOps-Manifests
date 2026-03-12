@@ -1,3 +1,4 @@
 *.env
 *.json
 *.secret.md
+actions-runner
