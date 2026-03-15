@@ -18,19 +18,19 @@ pull-backend:
 
 up: pull-backend
 	@echo ">> Pulling auxiliary images Postgres, Redis..."
-	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
+	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
 	@echo ">> Starting infrastructure with backend image tag: $(IMAGE_TAG)..."
-	IMAGE_TAG=$(IMAGE_TAG) podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
+	IMAGE_TAG=$(IMAGE_TAG) podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
 
 down:
-	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v
+	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v
 
 prune:
-	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v --rmi all
+	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v --rmi all
 	podman system prune -f
 
 recreate-volumes:
-	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env down
+	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env down
 	podman volume rm -f uit-buddy-backend_postgres_data uit-buddy-backend_redis_data || true
-	podman compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
+	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
 	@echo ">> Done. Volumes recreated fresh."
