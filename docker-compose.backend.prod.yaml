@@ -33,7 +33,7 @@ services:
       - ./uit-buddy-firebase-adminsdk-fbsvc-e3e18ce04a.json:/app/uit-buddy-firebase-adminsdk-fbsvc-e3e18ce04a.json:ro
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://buddy-postgres:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://buddy-postgres:5432/${POSTGRES_DB}?connectTimeout=3
       - DEV_REDIS_HOST=buddy-redis
       - DEV_REDIS_PORT=6379
     depends_on:
