@@ -28,8 +28,8 @@ services:
     volumes:
       - ./uit-buddy-firebase-adminsdk-fbsvc-e3e18ce04a.json:/app/uit-buddy-firebase-adminsdk-fbsvc-e3e18ce04a.json:ro
     environment:
-      - DEV_DATABASE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
-      - DEV_REDIS_HOST=redis
+      - DEV_DATABASE_URL=jdbc:postgresql://buddy-postgres:5432/${POSTGRES_DB}
+      - DEV_REDIS_HOST=buddy-redis
       - DEV_REDIS_PORT=6379
     depends_on:
       postgres:
