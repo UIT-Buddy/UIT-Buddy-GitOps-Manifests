@@ -60,6 +60,16 @@ services:
       timeout: 5s
       retries: 5
 
+  devcontainer:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    container_name: devcontainer-ubuntu
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    command: sleep infinity
+    tty: true
+    networks:
+      - buddy-net
 volumes:
   postgres_data:
   redis_data:
