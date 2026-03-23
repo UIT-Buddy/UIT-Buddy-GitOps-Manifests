@@ -33,35 +33,29 @@ services:
       - ./uit-buddy-firebase-adminsdk-fbsvc-e3e18ce04a.json:/app/uit-buddy-firebase-adminsdk-fbsvc-e3e18ce04a.json:ro
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://buddy-postgres:5432/${POSTGRES_DB}?connectTimeout=3
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${RDS_ENDPOINT}/${POSTGRES_DB}?connectTimeout=3
       - DEV_REDIS_HOST=buddy-redis
       - DEV_REDIS_PORT=6379
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
 
-  postgres:
-    image: docker.io/library/postgres:17-alpine
-    container_name: buddy-postgres
+  pgadmin:
+    image: docker.io/dpage/pgadmin4:latest
+    container_name: buddy-pgadmin
     restart: always
     networks:
       - buddy-net
+    ports:
+      - ${HOST_PGADMIN_PORT:-5050}:80
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - pgadmin_data:/var/lib/pgadmin
 
 volumes:
-  postgres_data:
+  pgadmin_data:
   redis_data:
 
 networks:
