@@ -1,4 +1,4 @@
-.PHONY: help up down prune recreate-volumes
+.PHONY: help backend-up n8n-up buddyai-up 
 
 # Default to latest if running manually, but accept pipeline variables
 IMAGE_TAG ?= latest
@@ -16,21 +16,14 @@ pull-backend:
 	@echo ">> Pulling backend image: $(IMAGE_NAME)"
 	podman pull $(IMAGE_NAME)
 
-up: pull-backend
+backend-up: pull-backend
 	@echo ">> Pulling auxiliary images Postgres, Redis..."
 	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
 	@echo ">> Starting infrastructure with backend image tag: $(IMAGE_TAG)..."
 	IMAGE_TAG=$(IMAGE_TAG) podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d --force-recreate
 
-down:
-	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v
+n8n-up:
+	@echo ">> Starting n8n..."
+	podman-compose -f docker-compose.n8n.prod.yaml --env-file n8n.env up -d
 
-prune:
-	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v --rmi all
-	podman system prune -f
 
-recreate-volumes:
-	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env down
-	podman volume rm -f uit-buddy-backend_postgres_data uit-buddy-backend_redis_data || true
-	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
-	@echo ">> Done. Volumes recreated fresh."
