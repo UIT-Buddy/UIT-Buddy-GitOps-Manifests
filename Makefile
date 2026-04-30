@@ -20,7 +20,7 @@ up: pull-backend
 	@echo ">> Pulling auxiliary images Postgres, Redis..."
 	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env pull postgres redis
 	@echo ">> Starting infrastructure with backend image tag: $(IMAGE_TAG)..."
-	IMAGE_TAG=$(IMAGE_TAG) podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d
+	IMAGE_TAG=$(IMAGE_TAG) podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env up -d --force-recreate
 
 down:
 	podman-compose -f docker-compose.backend.prod.yaml --env-file backend.env down -v

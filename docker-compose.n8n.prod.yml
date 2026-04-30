@@ -1,0 +1,16 @@
+name: uit-buddy-ai
+
+services:
+  n8n:
+    container_name: buddy-n8n
+    image: docker.n8n.io/n8nio/n8n:latest
+    restart: always
+    ports:
+      - ${HOST_N8N_PORT}:5678
+    env_file:
+      - n8n.env
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
