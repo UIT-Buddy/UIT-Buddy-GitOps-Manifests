@@ -7,6 +7,8 @@ services:
     restart: always
     ports:
       - ${HOST_N8N_PORT}:5678
+    environment:
+      - N8N_SECURE_COOKIE=false
     env_file:
       - n8n.env
     volumes:
