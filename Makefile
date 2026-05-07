@@ -1,4 +1,4 @@
-.PHONY: help backend-up n8n-up buddyai-up 
+.PHONY: help backend-up n8n-up buddyai-up ai-up
 
 # Default to latest if running manually, but accept pipeline variables
 IMAGE_TAG ?= latest
