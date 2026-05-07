@@ -26,4 +26,6 @@ n8n-up:
 	@echo ">> Starting n8n..."
 	podman-compose -f docker-compose.n8n.prod.yaml --env-file n8n.env up -d
 
-
+ai-up:
+	@echo ">> Starting buddyai..."
+	podman-compose -f docker-compose.ai.prod.yaml --env-file ai.env up -d
