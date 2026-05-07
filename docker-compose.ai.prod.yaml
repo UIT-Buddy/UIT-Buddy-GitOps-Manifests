@@ -17,7 +17,7 @@ services:
       - "${SERVER_PORT}:8000"
 
   neo4j:
-    image: neo4j:5.14.0
+    image: docker.io/neo4j:5.14.0
     container_name: buddy-neo4j
     restart: always
     ports:
