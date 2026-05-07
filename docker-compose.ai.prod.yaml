@@ -1,0 +1,33 @@
+name: uit-buddy-ai
+
+services:
+  backend:
+    image: ghcr.io/uit-buddy/ai:latest
+    container_name: uit-buddy-ai
+    restart: always
+    env_file:
+      - ai.env
+    environment:
+      - NEO4J_USERNAME=${NEO4J_USERNAME}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    ports:
+      - "${SERVER_PORT}:8000"
+
+  neo4j:
+    image: neo4j:5.14.0
+    container_name: buddy-neo4j
+    restart: always
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=${NEO4J_USERNAME}/${NEO4J_PASSWORD}
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  neo4j_data:
